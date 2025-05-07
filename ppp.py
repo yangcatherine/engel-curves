@@ -4,15 +4,16 @@ df = pd.read_csv("data/ppp/pwt1001.csv")
 
 
 # For PPP at the year of the survey. Assume cell phones are consumption goods
-def purchasing_power_parity(year, countrycode):  
-    row = df[(df['year'] == year) & (df['countrycode'] == countrycode)]
-    ppp = row["pl_c"]
+def purchasing_power_parity(base_year, current_year, countrycode):  
+    base_row = df[(df['year'] == base_year) & (df['countrycode'] == countrycode)]
+    ppp = base_row["pl_c"]
     #For constant 2017 prices
-    cgdpe = row["cgdpe"]
-    rgdpna = row["rgdpna"]
-    gdp_deflator = cgdpe / rgdpna
+    current_row = df[(df['year'] == current_year) & (df['countrycode'] == countrycode)]
+    cgdpe = current_row["cgdpe"]
+    rgdpna = base_row["rgdpna"]
+    gdp_deflator = cgdpe.values[0] / rgdpna.values[0]
 
-    return ppp, cgdpe, rgdpna, gdp_deflator
+    return ppp.values[0], cgdpe.values[0], rgdpna.values[0], gdp_deflator
 
 
 
@@ -30,5 +31,5 @@ def purchasing_power_parity(year, countrycode):
     restore'''
 
 
-print(purchasing_power_parity(1970, "ABW"))
+#print(purchasing_power_parity(1970, "ABW"))
 
